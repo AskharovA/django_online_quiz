@@ -1,0 +1,18 @@
+<form class="add-cat-form m-auto">
+    {% csrf_token %}
+    {{ form.name }}
+    {{ form.type }}
+    <input type="submit"
+           value="Добавить"
+           class="btn btn-outline-light category-btn-form"
+           hx-post="{% url 'main:add_category' quiz.id %}"
+           hx-target=".quiz-categories"
+           hx-swap="beforeend">
+</form>
+<script>
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('category-btn-form')) {
+            document.querySelector('.add-category-input').value = ''
+        }
+    })
+</script>

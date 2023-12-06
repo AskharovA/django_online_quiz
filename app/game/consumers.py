@@ -1,0 +1,176 @@
+from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.db import database_sync_to_async
+import json
+from .models import Game, QuestionState
+from .tasks import send_questions
+
+
+class GameSession(AsyncWebsocketConsumer):
+    async def connect(self):
+        self.session_name = self.scope['url_route']['kwargs']['game_code']
+        self.session_group_name = f'game_{self.session_name}'
+        await self.channel_layer.group_add(
+            self.session_group_name,
+            self.channel_name,
+        )
+        await self.accept()
+        await database_sync_to_async(self.change_player_status)(self.scope['user'], self.session_name)
+        await self.channel_layer.group_send(
+            self.session_group_name,
+            {
+                "type": "update_players",
+            }
+        )
+
+    async def receive(self, text_data=None, bytes_data=None):
+        data = json.loads(text_data)
+        if 'start-game' in data:
+            if not await database_sync_to_async(self.is_author)():
+                return
+            await database_sync_to_async(self.start_game)()
+            await self.channel_layer.group_send(
+                self.session_group_name,
+                {
+                    "type": "send_categories",
+                }
+            )
+        if 'choose-category' in data:
+            if not await database_sync_to_async(self.is_author)():
+                return
+            category_id = int(data['choose-category'].replace('category-', ''))
+            game_id = data['game-id']
+            # if await database_sync_to_async(self.category_is_played)(c_id=category_id):
+            #     return
+            await database_sync_to_async(self.set_category_id)(category_id, game_id)
+            await self.channel_layer.group_send(
+                self.session_group_name,
+                {
+                    "type": "choose_category",
+                    "category-id": category_id,
+                }
+            )
+        if 'start-category' in data:
+            if not await database_sync_to_async(self.is_author)():
+                return
+            # if await database_sync_to_async(self.category_is_played)(start=True):
+            #     return
+            await database_sync_to_async(self.change_category_status)()
+            send_questions.delay(self.session_name)
+        if 'get-statistics' in data:
+            await self.channel_layer.group_send(
+                self.session_group_name,
+                {
+                    "type": "send_statistics",
+                }
+            )
+
+    async def disconnect(self, code):
+        await database_sync_to_async(self.change_player_status)(self.scope['user'], self.session_name, True)
+        await self.channel_layer.group_discard(
+            self.session_group_name,
+            self.channel_name,
+        )
+        await self.channel_layer.group_send(
+            self.session_group_name,
+            {
+                "type": "update_players",
+            }
+        )
+
+    @staticmethod
+    def set_category_id(c_id, game_id):
+        game = Game.objects.get(lobby_code=game_id)
+        game.current_playing_category_id = c_id
+        game.save()
+
+    def change_category_status(self):
+        game = Game.objects.get(lobby_code=self.session_name)
+        category = game.category_states.get(id=game.current_playing_category_id)
+        category.is_played = True
+        category.save()
+
+    async def update_players(self, event):
+        await self.send(text_data=json.dumps({
+            "update-players": ""
+        }))
+
+    def change_player_status(self, user, session_name, disconnected=False):
+        game = Game.objects.get(lobby_code=session_name)
+        if self.scope['user'] != game.quiz.author:
+            if user.is_authenticated:
+                player = game.players.get(player=user)
+            else:
+                player = game.players.get(id=self.scope['session'][self.session_name])
+                if disconnected:
+                    player.is_online = False
+                elif not disconnected and not player.is_online:
+                    player.is_online = True
+                player.save()
+
+    async def send_question(self, event):
+        question = await(database_sync_to_async(QuestionState.objects.get)(id=event['id']))
+        await database_sync_to_async(self.change_question_status)(question)
+        await self.send(text_data=json.dumps({
+            'next-question': '',
+            "update-players": "",
+        }))
+
+    async def send_categories(self, event):
+        if not await database_sync_to_async(self.no_categories)():
+            await self.send(text_data=json.dumps({
+                "get-categories": "",
+                "update-players": "",
+            }))
+        else:
+            await database_sync_to_async(self.finish_game)()
+            await self.send(text_data=json.dumps({
+                "game-is-finished": "",
+                "update-players": "",
+            }))
+
+    @staticmethod
+    def change_question_status(q_obj):
+        q_obj.is_asked = True
+        q_obj.save()
+
+    async def send_statistics(self, event):
+        await self.send(text_data=json.dumps({
+            "send-statistics": "send-statistics",
+        }))
+
+    async def choose_category(self, event):
+        category_id = event['category-id']
+        await self.send(text_data=json.dumps({
+            'start-category': category_id,
+        }))
+
+    # def category_is_played(self, c_id=None, start=False):
+    #     game = Game.objects.get(lobby_code=self.session_name)
+    #     if start:
+    #         category = game.category_states.get(id=game.current_playing_category_id)
+    #     else:
+    #         category = game.category_states.get(id=c_id)
+    #     if category.category.type == '2':
+    #         return False
+    #     return category.is_played
+
+    def start_game(self):
+        game = Game.objects.get(lobby_code=self.session_name)
+        game.start_game()
+
+    def is_author(self):
+        game = Game.objects.get(lobby_code=self.session_name)
+        return game.quiz.author == self.scope['user']
+
+    def category_type_is_default(self):
+        game = Game.objects.get(lobby_code=self.session_name)
+        category = game.category_states.get(id=game.current_playing_category_id)
+        return category.category.type == '1'
+
+    def no_categories(self):
+        game = Game.objects.get(lobby_code=self.session_name)
+        return not game.category_states.filter(is_played=False).exists()
+
+    def finish_game(self):
+        game = Game.objects.get(lobby_code=self.session_name)
+        game.finish_game()

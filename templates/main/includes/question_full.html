@@ -1,0 +1,82 @@
+{% extends 'main/question_base.html' %}
+
+{% block btn %}
+    <button class="close-q-details-btn"
+            hx-get="{% url 'main:question_minimize' question.id %}"
+            hx-target="closest tr"
+            hx-swap="outerHTML">
+        Закрыть
+    </button>
+{% endblock %}
+
+{% block detail %}
+<tr class="quiz-question-details">
+    <td colspan="4" class="quiz-question-details-item">
+        <form>
+            <label class="form-label" for="id_text">Вопрос</label>
+            {{ question_form.text }}
+            <label class="form-label" for="id_points">Стоимость вопроса</label>
+            {{ question_form.points }}
+            {% if question.image %}
+                <br>
+                <div class="text-center">
+                    <img src="{{ question.image.url }}" class="rounded">
+                </div>
+            {% endif %}
+            <div class="media-labels">
+            </div>
+            <label class="form-label" for="id_image">Выбрать изображение</label>
+            {{ question_form.image }}
+            {% if question.audio %}
+                <br>
+                <audio src="{{ question.audio.url }}" controls style="width: 100%"></audio>
+            {% endif %}
+            <label class="form-label" for="id_audio">Выбрать аудиофайл</label>
+            {{ question_form.audio }}
+            {% if question.video %}
+                <br>
+                <video src="{{ question.video.url }}" controls style="width: 50%" class="d-block m-auto"></video>
+            {% endif %}
+            <label class="form-label" for="id_video">Выбрать видеофайл</label>
+            {{ question_form.video }}
+            <br>
+            {% if question.category.type == '1' %}
+                <h4 class="text-dark text-center">Варианты ответа</h4>
+                {% include 'main/includes/option_list.html' %}
+                <br>
+                <button class="btn btn-outline-dark"
+                        hx-post="{% url 'main:add_option' question.id %}"
+                        hx-target=".quiz-options"
+                        hx-swap="outerHTML">
+                    Добавить вариант ответа
+                </button>
+                <button class="btn btn-outline-danger"
+                        hx-post="{% url 'main:delete_option' question.id %}"
+                        hx-target=".quiz-options"
+                        hx-swap="outerHTML"
+                        hx-confirm="Вы уверены?">
+                    Удалить вариант ответа
+                </button>
+            {% elif question.category.type == '2' %}
+                <label class="form-label" for="id_correct_text_answer">Ответ</label>
+                {{ question_form.correct_text_answer }}
+                <br>
+            {% endif %}
+
+            <button class="btn btn-outline-danger"
+                    hx-post="{% url 'main:delete_question' question.id %}"
+                    hx-target="closest .table"
+                    hx-swap="outerHTML"
+                    hx-confirm="Вы уверены?">
+                Удалить вопрос
+            </button>
+                    <button class="btn btn-dark"
+                    hx-post="{% url 'main:question_detail' question.id %}"
+                    hx-target=".messages"
+                    hx-swap="innerHTML"
+                    hx-encoding="multipart/form-data">Сохранить изменения</button>
+        </form>
+    <div class="messages"></div>
+    </td>
+</tr>
+{% endblock %}

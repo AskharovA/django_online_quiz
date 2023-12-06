@@ -1,0 +1,74 @@
+services:
+
+  db:
+    image: postgres:14.5
+    restart: always
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+
+  web:
+    build: .
+    command: ["./wait-for-it.sh", 'db:5432', "--", "uwsgi", "--ini", "/django_online_quiz/config/uwsgi/uwsgi.ini"]
+    restart: always
+    volumes:
+      - .:/django_online_quiz
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=settings.prod
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    depends_on:
+      - db
+      - redis
+
+  nginx:
+    image: nginx:1.23.1
+    restart: always
+    volumes:
+      - ./config/nginx:/etc/nginx/templates
+      - ./letsencrypt:/etc/letsencrypt
+      - .:/django_online_quiz
+    ports:
+      - "80:80"
+      - "443:443"
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./letsencrypt:/etc/letsencrypt
+
+  daphne:
+    build: .
+    working_dir: /django_online_quiz/
+    command: ["./wait-for-it.sh", 'db:5432', "--", "daphne", "-u", "/django_online_quiz/daphne.sock", "config.asgi:application"]
+    restart: always
+    volumes:
+      - .:/django_online_quiz
+      - ./letsencrypt:/etc/letsencrypt
+    environment:
+      - REDIS_HOST=redis
+    depends_on:
+      - redis
+
+  celery_worker:
+    build: .
+    command: celery -A config worker -P eventlet --loglevel=info
+    restart: always
+    volumes:
+      - .:/django_online_quiz
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - redis

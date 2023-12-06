@@ -1,0 +1,15 @@
+<h2 class="stat-answer stat-item">{{ question.question.get_correct_option }}</h2>
+<br>
+<div class="stat-players">
+    {% for option in options %}
+        {% for player in option.answers.all %}
+            {% if option.option.is_correct %}
+                <div class="player stat-item">
+                    <div class="player-avatar"><img src="{{ player.avatar.image.url }}" class="player-avatar-img"></div>
+                    <p class="player-name">{{ player.player_name }}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+</div>
+<br>

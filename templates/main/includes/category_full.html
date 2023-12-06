@@ -1,0 +1,16 @@
+{% extends 'main/category_base.html' %}
+
+{% block btn %}
+    <button
+            hx-get="{% url 'main:category_minimize' category.id %}"
+            hx-target="closest .category-block"
+            hx-swap="outerHTML">
+        Свернуть
+    </button>
+{% endblock %}
+
+{% block questions %}
+    {% for question in category.questions.all %}
+        {% include 'main/includes/question_mini.html' %}
+    {% endfor %}
+{% endblock %}

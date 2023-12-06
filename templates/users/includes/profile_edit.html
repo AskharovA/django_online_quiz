@@ -1,0 +1,10 @@
+<form method="post" action="{% url 'users:profile_edit' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="id_nickname" class="text-secondary form-label">Псевдоним</label>
+    {{ form.nickname }}
+    <label for="id_avatar" class="text-secondary form-label">Загрузить аватар</label>
+    {{ form.avatar }}
+    <br>
+    <p class="text-danger">{{ form.errors }}</p>
+    <input type="submit" value="Сохранить изменения" class="btn btn-dark">
+</form>

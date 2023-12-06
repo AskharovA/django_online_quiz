@@ -1,0 +1,46 @@
+<div class="category-block overflow-hidden mb-4">
+<table class="table category-table m-0">
+    <tr>
+        <th colspan="3" class="table-head text-warning">{{ category.name }}</th>
+        <th class="table-btn">
+            <button
+                    hx-post="{% url 'main:add_question' category.id %}"
+                    hx-target="closest tbody"
+                    hx-swap="beforeend">Добавить вопрос</button></th>
+    </tr>
+    <tr>
+        <th>
+            <small style="width: 15%">
+                Стоимость вопроса
+            </small>
+        </th>
+        <th style="width: 55%;">
+            <small>
+                Текст
+            </small>
+        </th>
+        <th style="width: 15%">
+            <small>
+                {% if category.type == '1' %}Варианты ответа{% else %}Устная категория{% endif %}
+            </small>
+        </th>
+        <th style="width: 15%;" class="table-btn">
+            {% block btn %}
+            {% endblock %}
+        </th>
+    </tr>
+    {% block questions %}
+    {% endblock %}
+    <tfoot>
+        <tr>
+            <td colspan="3"></td>
+            <td class="bg-danger p-0">
+                <button hx-post="{% url 'main:delete_category' category.id %}"
+                        hx-target="closest .category-block"
+                        hx-swap="delete"
+                        hx-confirm="Вы уверены?">Удалить категорию</button>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+</div>

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <br>
+    <div class="profile m-auto bg-light p-4 rounded">
+        <h4 class="text-center text-dark">Мой профиль</h4><br>
+        <div class="w-100 d-flex gap-5 justify-content-center profile-item">
+            <div class="user-avatar overflow-hidden rounded-circle">
+                <img src="{{ profile.avatar.url }}" class="w-100 h-100">
+            </div>
+            <div class="user-info">
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1">nickname</span>
+                  <div class="email form-control">{{ profile.nickname }}</div>
+                </div>
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1">email</span>
+                  <div class="email form-control">{{ profile.user.email }}</div>
+                </div>
+                <button class="btn btn-dark d-block w-100 profile-btn"
+                        hx-get="{% url 'users:profile_edit' %}"
+                        hx-target=".user-info"
+                        hx-swap="innerHTML">Редактировать профиль</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

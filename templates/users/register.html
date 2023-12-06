@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="post" class="join-form bg-light">
+    {% csrf_token %}
+    <h5 class="text-center text-dark">Форма регистрации</h5>
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="id_email">@</span>
+        {{ form.email }}
+    </div>
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="id_password1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-key-fill" viewBox="0 0 16 16">
+          <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2zM2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+        </svg>
+      </span>
+        {{ form.password1 }}
+    </div>
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="id_password2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-key-fill" viewBox="0 0 16 16">
+          <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2zM2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+        </svg>
+      </span>
+        {{ form.password2 }}
+    </div>
+    <p class="text-danger">{{ form.errors }}</p>
+    <input type="submit" value="Отправить" class="btn btn-dark">
+</form>
+{% endblock %}

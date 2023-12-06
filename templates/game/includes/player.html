@@ -1,0 +1,11 @@
+{% if not player.game.quiz.author == player.player %}
+    <div class="player {% if not player.is_online %}disconnected{% endif %}">
+        {% if player.player.is_authenticated %}
+            <div class="player-avatar"><img src="{{ player.player.profile.avatar.url }}" class="player-avatar-img"></div>
+        {% else %}
+            <div class="player-avatar"><img src="{{ player.avatar.image.url }}" class="player-avatar-img"></div>
+        {% endif %}
+        <p class="player-name">{{ player.player_name|truncatewords_html:28 }}</p>
+        <p class="player-score">{{ player.score }}</p>
+    </div>
+{% endif %}

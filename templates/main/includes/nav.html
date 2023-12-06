@@ -1,0 +1,24 @@
+<nav class="user-nav main-nav">
+    <ul class="main-nav-list">
+        {% if request.user.is_authenticated %}
+            <li class="main-nav-list-item"><a class="nav-link" href="{% url 'users:profile' %}">
+                Профиль
+            </a></li>
+            <li class="main-nav-list-item"><a class="nav-link" href="{% url 'users:logout' %}">
+                Выйти
+            </a></li>
+        {% else %}
+            <li class="main-nav-list-item"><a class="nav-link" href="{% url 'users:login' %}">Войти в систему</a></li>
+        {% endif %}
+    </ul>
+</nav>
+<nav class="home-nav main-nav">
+    <ul class="main-nav-list">
+        <li class="main-nav-list-item"><a class="nav-link" href="{% url 'main:index' %}">
+            На главную
+        </a></li>
+        <li class="main-nav-list-item"><a class="nav-link" href="{% url 'main:about' %}">
+            О проекте
+        </a></li>
+    </ul>
+</nav>
