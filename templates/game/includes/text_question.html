@@ -15,23 +15,25 @@
             <br>
             <input type="submit"
                    value="Отправить ответ"
-                   class="btn btn-success"
+                   class="btn btn-success text-answer-button"
                    hx-post="{% url 'game:save_player_text_answer' question.id %}"
                    hx-target=".text-answer-form"
                    hx-swap="outerHTML">
         </form>
     {% endif %}
+    <div class="answered_players"
+        hx-get="{% url 'game:update_answers_block' question.game.id %}"
+        hx-trigger="every 1s"
+        hx-target=".answered_players"
+        hx-swap="innerHTML">
+    </div>
 </div>
 
 <script>
-    if (audio.paused) {
-        audio.play();
-    }
     clearInterval(interval);
     startTimer(text_time, display, timerBar);
     questionAudio = document.querySelector('.question-audio');
     if (questionAudio) {
-        questionAudio.volume = 0.25;
-        audio.pause();
+        questionAudio.volume = document.querySelector('.volume-slider').value;
     }
 </script>

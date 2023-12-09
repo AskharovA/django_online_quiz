@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-
+{% load static %}
+{% block head %}<link rel="stylesheet" href="{% static 'css/quizCreator.css' %}">{% endblock %}
 {% block content %}
 <div class="about-app text-light">
     <h4 class="text-center text-warning">О проекте</h4>

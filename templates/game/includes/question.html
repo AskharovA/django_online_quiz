@@ -27,9 +27,15 @@
                 hx-target=".game-options"
                 hx-swap="innerHTML">
                 {{ option.text }}
-            </div>
+                </div>
             {% endif %}
         {% endfor %}
+    </div>
+    <div class="answered_players"
+        hx-get="{% url 'game:update_answers_block' question.game.id %}"
+        hx-trigger="every 1s"
+        hx-target=".answered_players"
+        hx-swap="innerHTML">
     </div>
 </div>
 <script>

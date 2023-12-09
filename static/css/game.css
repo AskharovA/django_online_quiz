@@ -331,6 +331,24 @@
     text-align: center;
 }
 
+.answered_players {
+    height: 40px;
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.answered_player-avatar {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    scale: 50%;
+    overflow: hidden;
+    outline: 2px white solid;
+}
+
 @media (max-width: 1000px) {
     .main-game-block {
         width: 90%;

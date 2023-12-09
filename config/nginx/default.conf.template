@@ -23,8 +23,8 @@ server {
 
 server {
     listen 443 ssl;
-    ssl_certificate /django_online_quiz/letsencrypt/live/playquiz.kz/fullchain.pem;
-    ssl_certificate_key /django_online_quiz/letsencrypt/live/playquiz.kz/privkey.pem;
+    ssl_certificate /django_online_quiz/ssl/quiz.crt;
+    ssl_certificate_key /django_online_quiz/ssl/quiz.key;
     server_name www.playquiz.kz playquiz.kz;
     client_max_body_size 5M;
     error_log stderr warn;

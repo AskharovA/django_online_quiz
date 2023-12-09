@@ -1,4 +1,7 @@
 let lobbyCode = document.querySelector("#game_code").value
+let newInterval;
+let newTimer;
+// const WS = new WebSocket("wss://" + window.location.host + "/ws/game/" + lobbyCode + "/");
 const WS = new WebSocket("wss://" + window.location.host + "/ws/game/" + lobbyCode + "/");
 
 WS.onopen = function (e) {
@@ -34,6 +37,20 @@ WS.onmessage = function (e) {
     if ('game-is-finished' in data) {
         document.querySelector('#finish-game').click();
     }
+
+    if ('change_timer' in data) {
+        clearInterval(interval);
+        timerBar.style.width = '100%';
+        timerBar.style.backgroundColor = 'orange';
+        newTimer = 2
+        newInterval = setInterval(function (){
+            --newTimer;
+            if (newTimer === 0) {
+                clearInterval(newInterval);
+                document.querySelector("#get-statistics").click();
+            }
+        }, 1000)
+    }
 }
 
 let correct = document.querySelector('#correct');
@@ -52,3 +69,11 @@ function setVolume(value) {
 
 let playCategoryInterval;
 let readyTime = 50;
+
+document.addEventListener("click", function (event){
+    if (event.target.classList.contains("game-option") || event.target.classList.contains("text-answer-button")){
+            WS.send(JSON.stringify({
+                "player_answered": "player_answered"
+        }))
+    }
+})

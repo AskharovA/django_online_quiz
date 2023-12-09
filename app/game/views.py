@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, reverse, get_object_or_404
 from .models import Game, QuestionState, PlayerStat, TextAnswer, PlayerAvatar
 from app.main.models import Option
 from django.views.decorators.http import require_POST
+from django.core.cache import cache
 
 
 def main(request, game_code: str):
@@ -74,7 +75,13 @@ def check_player_answer(request, option_id, question_id):
         player = PlayerStat.objects.get(game=game, player=request.user)
     else:
         player = PlayerStat.objects.get(id=request.session[game.lobby_code])
+
+    players_cache = cache.get(game.lobby_code + "_answers")
+    players_cache.append(player)
+
     option = Option.objects.get(id=option_id)
+    cache.set(game.lobby_code + "_answers", players_cache, 900)
+
     if option.is_correct:
         player.score += question.question.points
         player.save()
@@ -108,6 +115,11 @@ def save_player_text_answer(request, question_id):
         player = game.players.get(player=request.user)
     else:
         player = game.players.get(id=request.session[game.lobby_code])
+
+    players_cache = cache.get(game.lobby_code + "_answers")
+    players_cache.append(player)
+    cache.set(game.lobby_code + "_answers", players_cache, 900)
+
     answer = request.POST['text-answer']
     TextAnswer.objects.create(
         game=game,
@@ -146,3 +158,11 @@ def close_game(request, game_id):
     game.finish_game()
     game.save()
     return redirect(reverse('main:index'))
+
+
+def update_answers_block(request, game_id):
+    game = Game.objects.get(id=game_id)
+    players_cache = cache.get(game.lobby_code + "_answers")
+    return render(request, 'game/includes/answers_block.html', {
+        'players': players_cache
+    })

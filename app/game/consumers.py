@@ -1,8 +1,11 @@
+from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 import json
 from .models import Game, QuestionState
 from .tasks import send_questions
+from django.core.cache import cache
+import asyncio
 
 
 class GameSession(AsyncWebsocketConsumer):
@@ -57,12 +60,31 @@ class GameSession(AsyncWebsocketConsumer):
             await database_sync_to_async(self.change_category_status)()
             send_questions.delay(self.session_name)
         if 'get-statistics' in data:
+            if not await database_sync_to_async(self.is_author)():
+                return
             await self.channel_layer.group_send(
                 self.session_group_name,
                 {
                     "type": "send_statistics",
                 }
             )
+            if await database_sync_to_async(self.get_category_type)() == '1':
+                send_questions.apply_async((self.session_name,), countdown=6)
+
+        if 'player_answered' in data:
+            cache_game = cache.get(self.session_name)
+            cache_game -= 1
+            cache.set(self.session_name, cache_game)
+            if cache_game == 0:
+                cache.delete(self.session_name)
+                await self.channel_layer.group_send(
+                    self.session_group_name,
+                    {
+                        "type": "change_timer"
+                    }
+                )
+                if await database_sync_to_async(self.get_category_type)() == '1':
+                    send_questions.apply_async((self.session_name,), countdown=6)
 
     async def disconnect(self, code):
         await database_sync_to_async(self.change_player_status)(self.scope['user'], self.session_name, True)
@@ -144,6 +166,16 @@ class GameSession(AsyncWebsocketConsumer):
             'start-category': category_id,
         }))
 
+    async def change_timer(self, event):
+        await self.send(text_data=json.dumps({
+            "change_timer": "change_timer"
+        }))
+
+    async def update_answers_block(self, event):
+        await self.send(text_data=json.dumps({
+            "update_answers_block": "update_answers_block"
+        }))
+
     # def category_is_played(self, c_id=None, start=False):
     #     game = Game.objects.get(lobby_code=self.session_name)
     #     if start:
@@ -174,3 +206,9 @@ class GameSession(AsyncWebsocketConsumer):
     def finish_game(self):
         game = Game.objects.get(lobby_code=self.session_name)
         game.finish_game()
+
+    #  New
+    def get_category_type(self):
+        game = Game.objects.get(lobby_code=self.session_name)
+        category = game.category_states.get(id=game.current_playing_category_id)
+        return category.category.type

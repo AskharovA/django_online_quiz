@@ -1,11 +1,12 @@
-const startTime = 5; // время в минутах
+const startTime = 5;
 let time = +document.querySelector('#timer_duration').value - 2;
 let text_time = +document.querySelector('#text_answer_timer_duration').value - 2
 let interval;
 
 let display = document.getElementById('time-display');
 let timerBar = document.getElementById('timer-bar');
-// timerBar.style.width = '100%';
+
+
 
 function startTimer(duration, display, timerBar) {
     let timer = duration, minutes, seconds;

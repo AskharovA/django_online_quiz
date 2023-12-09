@@ -14,5 +14,6 @@ urlpatterns = [
     path('play_category/<int:game_id>/', views.play_category, name='play-category'),
     path('get_categories/<int:game_id>/', views.get_categories, name='get_categories'),
     path('update_players/<int:game_id>/', views.update_players, name='update_players'),
+    path('update_answers_block/<int:game_id>/', views.update_answers_block, name='update_answers_block'),
     path('<str:game_code>/', views.main, name='game'),
 ]

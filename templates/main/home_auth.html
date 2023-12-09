@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load main_tags %}
-
+{% block head %}<link rel="stylesheet" href="{% static 'css/quizCreator.css' %}">{% endblock %}
 {% block content %}
     {% include 'main/includes/logo.html' %}
     <br><br>
