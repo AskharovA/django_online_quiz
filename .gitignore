@@ -16,3 +16,6 @@ staticfiles/
 *.sock.lock
 *.dir
 logs/
+certbot/
+letsencrypt/
+celerybeat-schedule

@@ -54,7 +54,6 @@ WS.onmessage = function (e) {
 }
 
 let correct = document.querySelector('#correct');
-correct.volume = 0.25;
 
 let gameId = document.querySelector('#game_code').value;
 
