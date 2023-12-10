@@ -141,8 +141,10 @@
 }
 
 .player-answer {
-    background-color: rgb(12, 2, 37);;
+    /*background-color: rgb(12, 2, 37);*/
     color: whitesmoke;
+
+    background-color: rgb(100, 10, 73);
 }
 
 .game-question-stat {
