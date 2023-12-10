@@ -11,11 +11,18 @@ document.addEventListener('click', function (event) {
         'game-id': gameId,
     })
         WS.send(send_data);
+        newTimer = 2;
+        newInterval = setInterval(function (){
+            if (--newTimer === 0){
+                clearInterval(newInterval)
+                document.getElementById('start-category-btn').click();
+            }
+        }, 1000)
     }
 })
 
 document.getElementById('start-category-btn').onclick = () => {
-            WS.send(JSON.stringify({
-            "start-category": "start-category",
+        WS.send(JSON.stringify({
+        "start-category": "start-category",
     }))
 }

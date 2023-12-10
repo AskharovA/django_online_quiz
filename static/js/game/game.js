@@ -33,6 +33,13 @@ WS.onmessage = function (e) {
         let categoryBtn = document.getElementById(`category-${categoryId}`);
         categoryBtn.classList.add('choose-category');
         correct.play();
+        let newTimer2 = 1
+        let newInterval2 = setInterval(function (){
+            for (let i = 0; i < categories.length; i++) {
+                categories[i].classList.add("category-fadeDown");
+            }
+        }, 1000)
+
     }
     if ('game-is-finished' in data) {
         document.querySelector('#finish-game').click();
