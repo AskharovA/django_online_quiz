@@ -97,3 +97,5 @@ document.addEventListener("click", function (event){
         }))
     }
 })
+
+setVolume(0.25)

@@ -1,7 +1,7 @@
 {% for player in players %}
     {% if player.player.is_authenticated %}
-        <div class="answered_player-avatar"><img src="{{ player.player.profile.avatar.url }}" class="player-avatar-img"></div>
+        <img src="{{ player.player.profile.avatar.url }}" class="answered_player-avatar">
     {% else %}
-        <div class="answered_player-avatar"><img src="{{ player.avatar.image.url }}" class="player-avatar-img"></div>
+        <img src="{{ player.avatar.image.url }}" class="answered_player-avatar">
     {% endif %}
 {% endfor %}
