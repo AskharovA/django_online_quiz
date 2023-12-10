@@ -130,12 +130,12 @@ def save_player_text_answer(request, question_id):
     return render(request, 'game/includes/accept_text_answer.html')
 
 
-def correct_text_answer(request, answer_id):
-    answer = TextAnswer.objects.get(id=answer_id)
-    points = answer.question.question.points
-    player = answer.player
-    player.score += points
-    player.save()
+def correct_text_answer(request):
+    # answer = TextAnswer.objects.get(id=answer_id)
+    # points = answer.question.question.points
+    # player = answer.player
+    # player.score += points
+    # player.save()
     return render(request, 'game/includes/correct_answer.html')
 
 

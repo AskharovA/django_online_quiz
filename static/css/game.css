@@ -173,6 +173,10 @@
     border: solid 5px darkred;
 }
 
+.text-answers-table {
+    animation: fadeUp2 .4s;
+}
+
 @keyframes fadeUp {
     from {
         opacity: 0;
@@ -429,4 +433,11 @@
     .game-master-block {
         top: 5%;
     }
+}
+
+.fade-down {
+    opacity: 0;
+    scale: 50%;
+    transform: rotate3d(1, 2, -1, 90deg);
+    transition: .5s all ease;
 }

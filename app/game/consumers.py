@@ -1,11 +1,9 @@
-from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 import json
-from .models import Game, QuestionState
+from .models import Game, QuestionState, TextAnswer
 from .tasks import send_questions
 from django.core.cache import cache
-import asyncio
 
 
 class GameSession(AsyncWebsocketConsumer):
@@ -86,6 +84,17 @@ class GameSession(AsyncWebsocketConsumer):
                 if await database_sync_to_async(self.get_category_type)() == '1':
                     send_questions.apply_async((self.session_name,), countdown=6)
 
+        if "correct_text_answer" in data:
+            answer_id = int(data["correct_text_answer"].replace("answer-", ""))
+            await database_sync_to_async(self.save_correct_text_answer)(answer_id)
+            await self.channel_layer.group_send(
+                self.session_group_name,
+                {
+                    "type": "correct_text_answer",
+                    "answer_id": answer_id
+                }
+            )
+
     async def disconnect(self, code):
         await database_sync_to_async(self.change_player_status)(self.scope['user'], self.session_name, True)
         await self.channel_layer.group_discard(
@@ -150,6 +159,11 @@ class GameSession(AsyncWebsocketConsumer):
                 "update-players": "",
             }))
 
+    async def correct_text_answer(self, event):
+        await self.send(text_data=json.dumps({
+            "correct_text_answer": event["answer_id"]
+        }))
+
     @staticmethod
     def change_question_status(q_obj):
         q_obj.is_asked = True
@@ -212,3 +226,11 @@ class GameSession(AsyncWebsocketConsumer):
         game = Game.objects.get(lobby_code=self.session_name)
         category = game.category_states.get(id=game.current_playing_category_id)
         return category.category.type
+
+    @staticmethod
+    def save_correct_text_answer(answer_id):
+        answer = TextAnswer.objects.get(id=answer_id)
+        points = answer.question.question.points
+        player = answer.player
+        player.score += points
+        player.save()

@@ -12,6 +12,7 @@
     {% bootstrap_javascript %}
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/particles.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.png' %}">
     {% block head %}{% endblock %}
     <script src="{% static 'js/main/main.js' %}" defer></script>
 </head>
@@ -31,7 +32,7 @@
         {% if request.user.is_admin %}
             <button class="head-user-button btn btn-outline-light">
                     {% include 'main/includes/icons/profile.html' %}
-                    <a href="{% url 'main:admin_panel' %}">Панель админа</a>
+                    <a href="{% url 'main:admin_panel' %}" class="text-light">Панель админа</a>
             </button>
         {% endif %}
             {% block head_buttons %}

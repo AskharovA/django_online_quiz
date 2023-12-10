@@ -1,7 +1,7 @@
 let lobbyCode = document.querySelector("#game_code").value
 let newInterval;
 let newTimer;
-// const WS = new WebSocket("wss://" + window.location.host + "/ws/game/" + lobbyCode + "/");
+
 const WS = new WebSocket("wss://" + window.location.host + "/ws/game/" + lobbyCode + "/");
 
 WS.onopen = function (e) {
@@ -45,11 +45,20 @@ WS.onmessage = function (e) {
         newTimer = 2
         newInterval = setInterval(function (){
             --newTimer;
+            if (newTimer === 1) {
+                let options = document.querySelectorAll(".game-option");
+                for (let i=0; i<options.length; i++){
+                    options[i].classList.add("fade-down")
+                }
+            }
             if (newTimer === 0) {
                 clearInterval(newInterval);
                 document.querySelector("#get-statistics").click();
             }
         }, 1000)
+    }
+    if ("correct_text_answer" in data) {
+        document.getElementById(`answer-id-${data["correct_text_answer"]}`).click();
     }
 }
 
@@ -73,6 +82,11 @@ document.addEventListener("click", function (event){
     if (event.target.classList.contains("game-option") || event.target.classList.contains("text-answer-button")){
             WS.send(JSON.stringify({
                 "player_answered": "player_answered"
+        }))
+    }
+    if (event.target.classList.contains("save-answer-btn")){
+        WS.send(JSON.stringify({
+            "correct_text_answer": event.target.id
         }))
     }
 })

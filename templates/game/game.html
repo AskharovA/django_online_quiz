@@ -11,18 +11,16 @@
 {% endblock %}
 
 {% block head_buttons %}
-    <button class="head-button btn btn-dark btn-outline-light game-control-buttons" id="start-game-btn">
-        {% include 'game/includes/icons/start_game.html' %}
-        Старт
-    </button>
-    <button class="head-button btn btn-dark btn-outline-light game-control-buttons" id="start-category-btn">
-        {% include 'game/includes/icons/play_category.html' %}
-        Запустить
-    </button>
-{#    <button class="head-button btn btn-dark btn-outline-light game-control-buttons" id="start-category-btn">#}
-{#        {% include 'game/includes/icons/settings.html' %}#}
-{#        Управление#}
-{#    </button>#}
+    {% if game.quiz.author == request.user %}
+        <button class="head-button btn btn-dark btn-outline-light game-control-buttons" id="start-game-btn">
+            {% include 'game/includes/icons/start_game.html' %}
+            Старт
+        </button>
+        <button class="head-button btn btn-dark btn-outline-light game-control-buttons" id="start-category-btn">
+            {% include 'game/includes/icons/play_category.html' %}
+            Запустить
+        </button>
+    {% endif %}
 {% endblock %}
 
 {% block timer %}

@@ -28,6 +28,12 @@ function startTimer(duration, display, timerBar) {
             timerBar.style.backgroundColor = 'gold';
         }
 
+        if (timer === 0) {
+            let options = document.querySelectorAll(".game-option");
+            for (let i=0; i<options.length; i++){
+                options[i].classList.add("fade-down")
+            }
+        }
 
         if (--timer < -1) {
             clearInterval(interval);
