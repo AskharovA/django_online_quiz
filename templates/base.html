@@ -12,13 +12,13 @@
     {% bootstrap_javascript %}
     <link rel="stylesheet" href="{% static 'css/snow.css' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
-{#    <link rel="stylesheet" href="{% static 'css/particles.css' %}">#}
+    <link rel="stylesheet" href="{% static 'css/particles.css' %}">
     <link rel="icon" type="image/x-icon" href="{% static 'favicon.png' %}">
     {% block head %}{% endblock %}
     <script src="{% static 'js/main/main.js' %}" defer></script>
 </head>
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-{#    {% include 'main/includes/snow.html' %}#}
+    {% include 'main/includes/particles.html' %}
     <header>
         {% block timer %}{% endblock %}
         <div class="head-buttons">
