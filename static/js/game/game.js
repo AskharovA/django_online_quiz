@@ -2,8 +2,8 @@ let lobbyCode = document.querySelector("#game_code").value
 let newInterval;
 let newTimer;
 
-// const WS = new WebSocket("wss://" + window.location.host + "/ws/game/" + lobbyCode + "/");
-const WS = new WebSocket("http://" + window.location.host + "/ws/game/" + lobbyCode + "/");
+const WS = new WebSocket("wss://" + window.location.host + "/ws/game/" + lobbyCode + "/");
+// const WS = new WebSocket("http://" + window.location.host + "/ws/game/" + lobbyCode + "/");
 
 WS.onopen = function (e) {
     console.log("Connected")
