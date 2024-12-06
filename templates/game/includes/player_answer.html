@@ -1,0 +1,9 @@
+{% for option in options %}
+    <div class="game-option {% if option.id == player_option.id %}player-answer{% endif %}">
+        {{ option.option.text }}
+    </div>
+{% endfor %}
+
+<script>
+    correct.play();
+</script>

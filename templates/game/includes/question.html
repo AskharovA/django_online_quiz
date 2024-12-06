@@ -1,0 +1,48 @@
+{% load static %}
+<h2 class="game-question-title">Вопрос {{ question.get_question_count }}/{{ question.get_total_questions_count }}</h2>
+<br>
+<div class="game-question-block">
+    <div class="game-question">
+        <div class="game-question-text">{{ question.question.text }}</div>
+        {% if question.question.image %}
+        <img src="{{ question.question.image.url }}" class="game-question-img">
+        {% endif %}
+        {% if question.question.audio %}
+            <audio src="{{ question.question.audio.url }}" autoplay class="question-audio audio-element"></audio>
+        {% endif %}
+        {% if question.question.video %}
+            <video src="{{ question.question.video.url }}" autoplay class="w-50 d-block m-auto audio-element"></video>
+        {% endif %}
+    </div>
+    <br>
+    <div class="game-options">
+        {% for option in question.question.options.all %}
+            {% if question.game.quiz.author == request.user %}
+                <div class="game-option">
+                    {{ option.text }}
+                </div>
+            {% else %}
+                <div class="game-option"
+                hx-get="{% url 'game:player-answer' option.id question.id %}"
+                hx-target=".game-options"
+                hx-swap="innerHTML">
+                {{ option.text }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class="answered_players"
+        hx-get="{% url 'game:update_answers_block' question.game.id %}"
+        hx-trigger="every 1s"
+        hx-target=".answered_players"
+        hx-swap="innerHTML">
+    </div>
+</div>
+<script>
+    clearInterval(interval);
+    startTimer(time, display, timerBar);
+    questionAudio = document.querySelector('.question-audio');
+    if (questionAudio) {
+        questionAudio.volume = document.querySelector('.volume-slider').value;
+    }
+</script>

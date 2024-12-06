@@ -1,0 +1,120 @@
+.quiz-categories {
+    background-color: transparent;
+    animation: fadeUp2 .5s;
+}
+
+td {
+    color: black;
+}
+
+td>button, th>button {
+    color: whitesmoke;
+    background-color: transparent;
+    border: none;
+    width: 100%;
+    height: 100%;
+    font-weight: bold;
+    font-size: 0.7em;
+}
+
+.quiz-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 10px;
+    column-gap: 10px;
+}
+
+label {
+    color: dimgray;
+}
+
+textarea {
+    resize: none;
+    height: 100px;
+}
+
+.quiz-question-details-item {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.quiz-list {
+    display: grid;
+    width: 60%;
+    margin: 20px auto;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+    row-gap: 20px;
+}
+
+.quiz-list-item {
+    border-radius: 20px;
+    height: 280px;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+}
+
+.quiz-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    height: 40%;
+    font-weight: bold;
+}
+
+.quiz-description {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60%;
+    font-size: 1.2rem;
+}
+
+.quiz-title:hover {
+    background-color: rgba(0, 0, 0, 0.25);
+    transition: .25s ease background-color;
+}
+
+.add-icon {
+    scale: 200%;
+    cursor: pointer;
+    transition: all ease .25s;
+}
+
+.add-icon:hover {
+    scale: 220%;
+}
+
+.category-block {
+    border-radius: 15px;
+}
+
+th, td {
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    color: black;
+}
+
+th {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    color: white;
+    text-align: center;
+}
+
+.table-q-btn {
+    background-color: rgba(112, 133, 219, 0.6) !important;
+}
+
+@media (max-width: 1400px) {
+    .quiz-list {
+        width: 75%;
+    }
+}
+
+@media (max-width: 800px) {
+    .quiz-list {
+        width: 95%;
+        grid-template-columns: 1fr;
+    }
+}

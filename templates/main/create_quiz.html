@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}<link rel="stylesheet" href="{% static 'css/quizCreator.css' %}">{% endblock %}
+{% block content %}
+    <br>
+    <form action="" method="post" class="create-form m-auto w-50 p-4 bg-light rounded-2">
+        {% csrf_token %}
+        {{ form.errors }}
+        {{ form.title }}
+        <br>
+        {{ form.description }}
+        <br>
+        <input type="submit" value="Создать" class="btn btn-dark">
+    </form>
+{% endblock %}

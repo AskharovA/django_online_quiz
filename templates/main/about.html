@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}<link rel="stylesheet" href="{% static 'css/quizCreator.css' %}">{% endblock %}
+{% block content %}
+<div class="about-app text-light">
+    <h4 class="text-center text-warning">О проекте</h4>
+    <h6 class="text-warning">Цель проекта</h6>
+    <p>Создание интерактивной и динамичной платформы для создания и проведения онлайн викторин.</p>
+    <h6 class="text-warning">Обзор проекта</h6>
+    <p>
+        Данное веб-приложение - это дипломный проект, разработанный в рамках учебного курса в Step IT Academy.
+        Основная задача веб-приложения - предоставить пользователям инструмент для создания индивидуальных квизов
+        и возможность участвовать в онлайн играх с другими пользователями в реальном времени.
+    </p>
+    <h6 class="text-warning">Стек технологии:</h6>
+    <ul>
+        <li>
+            <span class="text-info">Django:</span> Основа веб-приложения, обеспечивающий backend и frontend.
+        </li>
+        <li>
+            <span class="text-info">HTML & CSS & Bootstrap:</span> Структура и стиль интерфейса пользователя.
+        </li>
+        <li>
+            <span class="text-info">JavaScript & HTMX:</span> Динамическое взаимодействие на стороне клиента. Отправка AJAX запросов.
+        </li>
+        <li>
+            <span class="text-info">Celery:</span> Организация асинхронных задач.
+        </li>
+        <li>
+            <span class="text-info">Eventlet</span> Запуск асинхронных задач Celery.
+        </li>
+        <li>
+            <span class="text-info">Redis:</span> Брокер сообщений, создание очереди задач.
+        </li>
+        <li>
+            <span class="text-info">Django Channels:</span> Расширение веб-протокола Django, обработка WebSockets. Обработка данных
+            в асинхронном режиме.
+        </li>
+        <li>
+            <span class="text-info">Channels-Redis:</span> Основной канальный слой Channels.
+        </li>
+        <li>
+            <span class="text-info">Daphne:</span> ASGI-сервер. Обработка входящих соединений WebSockets.
+        </li>
+        <li>
+            <span class="text-info">uWSGI:</span> Веб сервер. Обеспечение эффективной загрузки.
+        </li>
+        <li>
+            <span class="text-info">NGINX:</span> HTTP-сервер. Перенаправление запросов к uWSGI и Daphne.
+        </li>
+        <li>
+            <span class="text-info">Docker и Docker-compose:</span> Контейнеризация и определение запуска веб-приложения.
+        </li>
+    </ul>
+</div>
+{% endblock %}

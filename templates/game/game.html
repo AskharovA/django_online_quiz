@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/game.css' %}">
+    <script src="{% static 'js/game/game.js' %}" defer></script>
+    <script src="{% static 'js/game/timer.js' %}" defer></script>
+    {% if game.quiz.author == request.user or game.is_test %}
+        <script src="{% static 'js/game/game_master.js' %}" defer></script>
+    {% endif %}
+{% endblock %}
+
+{% block head_buttons %}
+    {% if game.quiz.author == request.user or game.is_test %}
+        <button class="head-button btn btn-dark btn-outline-light game-control-buttons" id="start-game-btn">
+            {% include 'game/includes/icons/start_game.html' %}
+            Старт
+        </button>
+        <button class="head-button btn btn-dark btn-outline-light game-control-buttons d-none" id="start-category-btn">
+            {% include 'game/includes/icons/play_category.html' %}
+            Запустить
+        </button>
+    {% endif %}
+{% endblock %}
+
+{% block timer %}
+    {% include 'game/includes/timer.html' %}
+{% endblock %}
+
+{% block header %}
+    {% if game.quiz.author == request.user %}
+        <div class="top-game-code text-secondary">Код приглашения:<br><span class="fs-4 text-warning">{{ game.lobby_code }}</span></div>
+    {% endif %}
+
+    <div class="volume-controller">
+        <div class="volume-controller-icon">
+            {% include 'game/includes/icons/volume.html' %}
+        </div>
+        <input type="range" id="volume" name="volume" min="0.01" max="1" step="0.01" value="0.25" class="volume-slider"
+               oninput="setVolume(this.value)">
+    </div>
+        <div class="player game-master-block">
+            <div class="player-avatar"><img src="{{ game.quiz.author.profile.avatar.url }}" class="player-avatar-img"></div>
+            <p class="player-name">{{ game.quiz.author.profile.nickname }}</p>
+            <p class="player-score">Ведущий</p>
+        </div>
+{% endblock %}
+
+{% block content %}
+    <div class="main-game-block">
+        {% if game.status == 'W' %}
+            {% if game.is_test %}
+                {% include 'game/includes/lobby_test.html' %}
+            {% else %}
+                {% include 'game/includes/lobby.html' %}
+            {% endif %}
+        {% elif game.status == 'A' %}
+            {% include 'game/includes/categories.html' with categories=game.category_states.all %}
+        {% elif game.status == 'F' %}
+            <h1 class="lobby-text">Игра завершена.</h1>
+            <h4 class="text-center text-info get-final-stat-text-btn" role="button">Посмотреть статистику</h4>
+            <script src="{% static 'js/game/final_stat.js' %}"></script>
+        {% endif %}
+    </div>
+
+    <div class="players">
+        {% include 'game/includes/players.html' %}
+    </div>
+
+    <input type="hidden" id="game_code" value="{{ game.lobby_code }}">
+    <input type="hidden" id="timer_duration" value="{{ game.timer }}">
+    <input type="hidden" id="text_answer_timer_duration" value="{{ game.text_answer_timer }}">
+
+    {% include 'game/includes/hidden_buttons.html' %}
+
+    <audio src="{% static 'correct.mp3' %}" id="correct" class="audio-element"></audio>
+
+{% endblock %}

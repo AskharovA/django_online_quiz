@@ -1,0 +1,7 @@
+{% for player in players %}
+    {% if player.player.is_authenticated %}
+        <img src="{{ player.player.profile.avatar.url }}" class="answered_player-avatar">
+    {% else %}
+        <img src="{{ player.avatar.image.url }}" class="answered_player-avatar">
+    {% endif %}
+{% endfor %}

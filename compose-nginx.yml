@@ -1,0 +1,23 @@
+services:
+  quiz_nginx_service:
+    image: nginx:alpine-slim
+    container_name: quiz_nginx
+    volumes:
+      - ./config/nginx-prod:/etc/nginx/conf.d
+      - static-data:/app/static
+      - media-data:/app/media
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/lib/letsencrypt:/var/lib/letsencrypt
+    networks:
+      - quizNetwork
+    ports:
+      - "80:80"
+      - "443:443"
+
+networks:
+  quizNetwork:
+    external: true
+
+volumes:
+  static-data:
+  media-data:

@@ -1,0 +1,28 @@
+<tr>
+    <td>
+        {{ question.points }}
+    </td>
+    <td>
+        {{ question.text|truncatewords_html:20 }}
+    </td>
+    <td>
+        {% if question.category.type == '1' %}{{ question.options.count }}{% endif %}
+    </td>
+    <td class="table-q-btn">
+        {% block btn %}
+        {% endblock %}
+    </td>
+</tr>
+{% block detail %}
+{% endblock %}
+
+<script>
+    document.addEventListener('click', function (event) {
+    if (event.target.classList.contains('close-q-details-btn')) {
+        let row = event.target.closest('tr').nextElementSibling;
+        if (row && row.classList.contains('quiz-question-details')) {
+            row.remove();
+        }
+    }
+    })
+</script>

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/quizCreator.css' %}">
+    <script src="{% static 'js/main/quiz.js' %}" defer></script>
+{% endblock %}
+
+{% block content %}
+    <h2 class="text-light text-center">Quiz: {{ quiz.title }}</h2>
+    <br>
+    <form action="{% url 'main:delete_quiz' quiz.id %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Удалить квиз" class="btn btn-warning d-block m-auto delete-quiz-btn">
+    </form>
+    <button class="btn btn-success mt-2"
+            hx-get="{% url 'main:check_quiz_for_errors' quiz.id %}"
+            hx-target=".quiz-errors"
+            hx-swap="innerHTML">Проверить квиз на ошибки</button>
+    <div class="quiz-errors"></div>
+    <br>
+    {% include 'main/includes/category_form.html' %}
+    <br>
+    <div class="quiz-categories">
+        {% include 'main/includes/category_list.html' %}
+    </div>
+{% endblock %}

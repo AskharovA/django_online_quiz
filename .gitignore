@@ -1,0 +1,16 @@
+venv/
+.env
+db.sqlite3
+__pycache__/
+.idea/
+data/
+ssl/
+*.bak
+*.tmp
+*.swp
+staticfiles/
+*.sock
+*.dat
+*.lock
+*.sock.lock
+.prod.env

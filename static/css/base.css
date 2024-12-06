@@ -1,0 +1,364 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Marck+Script&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: rgb(9,46,97);
+    background: radial-gradient(circle, rgba(9,46,97,1) 20%, rgba(16,25,69,1) 100%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    overflow-x: hidden;
+}
+
+main {
+    max-width: 1600px;
+    margin: auto;
+    padding: 10px;
+    width: 100vw;
+    height: 94vh;
+}
+
+.add-cat-form {
+    width: 90%;
+    display: flex;
+    gap: 10px;
+}
+
+img {
+    width: 400px;
+}
+
+.join-form {
+    width: 50%;
+    margin: 10px auto;
+    border-radius: 10px;
+    padding: 10px;
+    animation: fadeUp2 .7s;
+}
+
+.home-btn {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(21, 21, 21, 0.95);
+    color: white;
+    padding: 25px;
+    border: none;
+    font-family: 'Rubik Mono One', monospace;
+    font-size: 0.9rem;
+    transition: .2s ease background-color;
+    border-radius: 2px;
+}
+
+.home-btn:hover {
+    background-color: rgba(21, 21, 21, 0.6);
+}
+
+.gradient-btn-bg {
+    display: block;
+    background: linear-gradient(to right, #00a6ff, #510080);
+    padding: 4px;
+    width: 40%;
+    margin: 10px auto;
+    border-radius: 2px;
+    transition: .2s ease scale;
+}
+
+.gradient-btn-bg:hover {
+    scale: 102%;
+}
+
+.run-test-game-btn {
+    background: linear-gradient(to right, #8400ff, #7c0080);
+}
+
+a {
+    text-decoration: none;
+}
+
+@keyframes fadeUp2 {
+    from {
+        opacity: 0;
+        scale: 75%;
+    }
+    to {
+        opacity: 1;
+        scale: 100%;
+    }
+}
+
+.user-nav, .home-nav {
+    background-color: #212121;
+    position: absolute;
+    box-shadow: 5px 5px 2px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    top: 5%;
+    left: 0.5%;
+    overflow: hidden;
+    display: none;
+    z-index: 1;
+    animation: fadeUp2 .2s;
+}
+
+.main-nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.main-nav-list-item {
+    color: floralwhite;
+    padding: 10px 15px;
+    font-size: 1.1rem;
+}
+
+.main-nav-list-item:hover {
+    background-color: #363636;
+}
+
+.head-buttons {
+    display: flex;
+    gap: 5px;
+    padding: 5px;
+    z-index: 1;
+}
+
+.head-user-button, .home-url-btn {
+    display: block;
+    font-size: 0;
+    background-color: #212121;
+}
+
+
+.home-input {
+    display: block;
+    width: 100%;
+    padding: 15px 10px;
+    border: none;
+    outline: none;
+    border-radius: 2px;
+    background-color: #0e0e48;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+.home-input::placeholder {
+    color: #0f5d8c;
+}
+
+.logo {
+    font-size: clamp(2rem, 10vw + 1rem, 8rem);
+    text-align: center;
+    color: white;
+    font-family: "Black Ops One";
+    text-shadow: 0 0 10px rgba(30, 144, 255, 0.75);
+}
+
+.title {
+    text-align: center;
+    font-size: clamp(0.5rem, 1vw + 0.5rem, 1rem);
+    color: white;
+    margin-top: -20px;
+    font-family: "Rubik Mono One";
+    text-shadow: 0 0 7px rgba(30, 144, 255, 0.75);
+}
+
+.avatars {
+    width: 75%;
+    background-color: rgba(234, 233, 233, 1);
+    margin: auto;
+    gap: 10px;
+    flex-wrap: wrap;
+    display: none;
+    padding: 25px;
+    border-radius: 10px;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.25);
+    z-index: 1;
+    animation: .5s fadeUp2;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    transition: .4s all ease;
+}
+
+.avatar:hover {
+    scale: 105%;
+    border: 1px black solid;
+}
+
+.avatar>img, .current-avatar>img {
+    width: 100%;
+    height: 100%;
+}
+
+.current-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: auto;
+    border: 2px white solid;
+    box-shadow: rgba(0, 0, 0, 0.25) 5px 5px 5px;
+    overflow: hidden;
+}
+
+.user-avatar {
+    width: 200px;
+    height: 200px;
+}
+
+.profile-btn {
+    margin-bottom: 5px !important;
+}
+
+.profile {
+    width: 60% !important;
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.25);
+    animation: fadeUp2 .7s;
+}
+
+.user-avatar {
+    outline: white 4px solid;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.25);
+}
+
+.user-info {
+    width: 60%;
+}
+
+.home-page-block {
+    width: 50%;
+    margin: auto;
+}
+
+.about-app {
+    text-align: justify;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.25);
+    padding: 20px;
+    width: 75%;
+    margin: 25px auto;
+    animation: fadeUp2 0.7s
+}
+
+@media (max-width: 1200px){
+    .gradient-btn-bg {
+        width: 50%;
+    }
+    .home-page-block {
+        width: 65%;
+    }
+    .about-app, .join-form {
+        width: 80%;
+    }
+    .profile {
+        width: 90% !important;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 1000px){
+    .gradient-btn-bg {
+        width: 65%;
+    }
+    .home-page-block {
+        width: 75%;
+    }
+    th, td {
+        font-size: 0.8rem;
+    }
+    .profile-item {
+        display: block !important;
+    }
+    .profile-item>div {
+        margin: auto;
+    }
+    .user-info {
+        width: 95%;
+        margin-top: 20px !important;
+    }
+}
+
+@media (max-height: 850px) {
+    main {
+        height: 92vh;
+    }
+}
+
+@media (max-width: 800px) {
+    .gradient-btn-bg, .home-page-block, .about-app, .join-form {
+        width: 95%;
+    }
+    .avatars {
+        width: 95%;
+    }
+    .head-buttons>button {
+        font-size: 0;
+    }
+    th, td {
+        font-size: 0.7rem;
+    }
+}
+
+.about-app p {
+    text-indent: 1rem;
+}
+
+.delete-quiz-btn {
+    font-size: 0.8rem;
+    padding: 4px 7px;
+}
+
+.create-quiz-btn {
+    font-size: 0;
+    padding: 0;
+}
+
+.create-form {
+    animation: .7s fadeUp2;
+}
+
+.home-url-btn, .head-user-button {
+    font-size: 0.6rem;
+}
+
+/* Стилизация скроллбара для всей страницы */
+::-webkit-scrollbar {
+    width: 6px; /* ширина скроллбара */
+}
+
+/* Стилизация ползунка скроллбара */
+::-webkit-scrollbar-thumb {
+    background: #888; /* цвет ползунка */
+    border-radius: 6px; /* закругление углов */
+}
+
+/* Изменение цвета ползунка при наведении */
+::-webkit-scrollbar-thumb:hover {
+    background: #555; /* цвет ползунка при наведении */
+}
+
+/* Стилизация дорожки скроллбара */
+::-webkit-scrollbar-track {
+    background: #e7e7e7; /* цвет дорожки */
+}

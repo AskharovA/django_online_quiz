@@ -1,0 +1,10 @@
+venv
+.env
+db.sqlite3
+.gitignore
+.gitattributes
+.idea
+wait-for-it.sh
+uwsgi_app.sock
+ssl
+__pycache__

@@ -1,0 +1,52 @@
+<!doctype html>
+{% load static %}
+{% load django_bootstrap5 %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PLAYQUIZ</title>
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+{#    <link rel="stylesheet" href="{% static 'css/snow.css' %}">#}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/particles.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.png' %}">
+    {% block head %}{% endblock %}
+    <script src="{% static 'js/main/main.js' %}" defer></script>
+</head>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+    {% include 'main/includes/particles.html' %}
+    <header>
+        {% block timer %}{% endblock %}
+        <div class="head-buttons">
+            <button class="home-url-btn btn btn-outline-light">
+                {% include 'main/includes/icons/house.html' %}
+                Навигация
+            </button>
+            <button class="head-user-button btn btn-outline-light">
+                {% include 'main/includes/icons/profile.html' %}
+                Аккаунт
+            </button>
+        {% if request.user.is_admin %}
+            <button class="head-user-button btn btn-outline-light">
+                    {% include 'main/includes/icons/profile.html' %}
+                    <a href="{% url 'main:admin_panel' %}" class="text-light">Панель админа</a>
+            </button>
+        {% endif %}
+            {% block head_buttons %}
+            {% endblock %}
+        </div>
+        {% block header %}
+        {% endblock %}
+        {% include 'main/includes/nav.html' %}
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <script src="https://unpkg.com/htmx.org@1.9.4"></script>
+</body>
+</html>

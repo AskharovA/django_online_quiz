@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/quizCreator.css' %}">
+    <script src="{% static 'js/main/home.js' %}" defer></script>
+{% endblock %}
+
+{% block content %}
+    <div class="avatars">
+    {% for avatar in avatars %}
+        <div class="avatar">
+            <img src="{{ avatar.image.url }}" class="avatar-img" id="{{ avatar.id }}"
+                hx-get="{% url 'main:get_avatar' avatar.id %}"
+                hx-target=".current-avatar"
+                hx-swap="innerHTML">
+        </div>
+    {% endfor %}
+    </div>
+    {% include 'main/includes/logo.html' %}
+    <br><br>
+    {% with current_avatar as avatar %}
+        <div class="current-avatar">
+            <img src="{{ avatar.image.url }}" class="avatar-img" id="{{ avatar.id }}">
+        </div>
+    {% endwith %}
+    <div class="gradient-btn-bg choose-avatar-btn"><button class="home-btn choose-avatar-btn">
+        {% include 'main/includes/icons/avatar.html' %}
+        Выбрать аватар
+    </button></div>
+    <form action="{% url 'game:join_game' %}" method="post">
+        {% csrf_token %}
+        <div class="gradient-btn-bg">
+            <input type="text" class="home-input" placeholder="код игры" name="game_code" autocomplete="off">
+        </div>
+        <div class="gradient-btn-bg">
+            <input type="text" class="home-input" placeholder="никнейм" name="player_name" autocomplete="off">
+        </div>
+        <input type="hidden" name="avatar_id" id="avatarId" value="{{ current_avatar.id }}">
+        <div class="gradient-btn-bg">
+            <button type="submit" class="home-btn">
+                {% include 'main/includes/icons/arrow-in.html' %}
+                Войти в игру
+            </button>
+        </div>
+        <a href="{% url 'game:run_test_game' %}">
+            <div class="gradient-btn-bg run-test-game-btn">
+                <button type="button" class="home-btn">
+                    {% include 'main/includes/icons/test_game.html' %}
+                    Сыграть в тестовую игру
+                </button>
+            </div>
+        </a>
+    </form>
+{% endblock %}

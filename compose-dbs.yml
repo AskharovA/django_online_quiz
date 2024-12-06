@@ -1,0 +1,23 @@
+services:
+  quiz_postgres_service:
+    image: postgres:16-bookworm
+    container_name: quiz_db
+    volumes:
+      - quiz-data:/var/lib/postgresql/data
+    networks:
+      - quizNetwork
+    env_file:
+      - .prod.env
+
+  quiz_redis_service:
+    image: redis:7.4
+    container_name: quiz_redis
+    networks:
+      - quizNetwork
+
+networks:
+  quizNetwork:
+    external: true
+
+volumes:
+  quiz-data:

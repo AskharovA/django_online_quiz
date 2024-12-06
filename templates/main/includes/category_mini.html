@@ -1,0 +1,10 @@
+{% extends 'main/category_base.html' %}
+
+{% block btn %}
+    <button
+            hx-get="{% url 'main:category_full' category.id %}"
+            hx-target="closest .category-block"
+            hx-swap="outerHTML">
+        Развернуть
+    </button>
+{% endblock %}

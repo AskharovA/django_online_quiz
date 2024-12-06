@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}<link rel="stylesheet" href="{% static 'css/quizCreator.css' %}">{% endblock %}
+{% block content %}
+    <h2 class="text-center text-light">Мои викторины</h2><br>
+    <div class="quiz-list">
+        {% for quiz in quiz_objects %}
+            <div class="quiz-list-item">
+                <div class="quiz-title">
+                    <a href="{% url 'main:quiz_detail' quiz.id %}" class="text-warning">{{ quiz.title }}</a>
+                </div>
+                <div class="quiz-description text-light">
+                    <p>{{ quiz.description }}</p>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="quiz-list-item">
+            <div class="add-quiz-block d-flex align-items-center justify-content-center h-100">
+                <a class="add-icon text-light" href="{% url 'main:create_quiz' %}">
+                    {% include 'main/includes/icons/add.html' %}
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

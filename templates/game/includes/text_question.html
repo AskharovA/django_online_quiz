@@ -1,0 +1,39 @@
+<h2 class="game-question-title">Вопрос {{ question.get_question_count }} из {{ question.get_total_questions_count }}</h2>
+<div class="game-question-block">
+    <div class="game-question">
+        <div class="game-question-text">{{ question.question.text }}</div>
+        {% if question.question.image %}
+            <img src="{{ question.question.image.url }}" class="game-question-img">
+        {% endif %}
+        {% if question.question.audio %}
+            <audio src="{{ question.question.audio.url }}" autoplay class="question-audio"></audio>
+        {% endif %}
+    </div>
+    {% if not question.game.quiz.author == request.user %}
+        <form class="text-answer-form">
+            <input type="text" name="text-answer" class="form-control bg-dark text-light">
+            <br>
+            <input type="submit"
+                   value="Отправить ответ"
+                   class="btn btn-success text-answer-button"
+                   hx-post="{% url 'game:save_player_text_answer' question.id %}"
+                   hx-target=".text-answer-form"
+                   hx-swap="outerHTML">
+        </form>
+    {% endif %}
+    <div class="answered_players"
+        hx-get="{% url 'game:update_answers_block' question.game.id %}"
+        hx-trigger="every 1s"
+        hx-target=".answered_players"
+        hx-swap="innerHTML">
+    </div>
+</div>
+
+<script>
+    clearInterval(interval);
+    startTimer(text_time, display, timerBar);
+    questionAudio = document.querySelector('.question-audio');
+    if (questionAudio) {
+        questionAudio.volume = document.querySelector('.volume-slider').value;
+    }
+</script>

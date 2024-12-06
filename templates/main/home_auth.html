@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load main_tags %}
+{% block head %}<link rel="stylesheet" href="{% static 'css/quizCreator.css' %}">{% endblock %}
+{% block content %}
+    {% include 'main/includes/logo.html' %}
+    <br><br>
+    <div class="home-page-block">
+        <div class="current-avatar-block">
+            <div class="current-avatar current-avatar-auth">
+                <img src="{{ request.user.profile.avatar.url }}" class="avatar-img">
+            </div>
+            <h6 class="text-center text-warning mt-2">{{ user.profile.nickname }}</h6>
+            <a href="{% url 'users:profile' %}"><h6 class="text-center text-secondary">Перейти к профилю</h6></a>
+        </div>
+        <form action="{% url 'game:join_game' %}" method="post" class="">
+            {% csrf_token %}
+            <div class="gradient-btn-bg w-100">
+                <input type="text" class="home-input" placeholder="код игры" name="game_code" autocomplete="off">
+            </div>
+            <div class="gradient-btn-bg w-100">
+                <button type="submit" class="home-btn">
+                    {% include 'main/includes/icons/arrow-in.html' %}
+                    Присоединиться к игре
+                </button>
+            </div>
+        </form>
+        <a class="gradient-btn-bg w-100" href="{% url 'main:create_game_session' %}">
+            <button type="submit" class="home-btn">
+                {% include 'main/includes/icons/controller.html' %}
+                Создать лобби
+            </button>
+        </a>
+        <a class="gradient-btn-bg w-100" href="{% url 'main:quiz_list' %}">
+            <button type="submit" class="home-btn">
+                {% include 'main/includes/icons/cubes.html' %}
+                Мои викторины
+            </button>
+        </a>
+
+        {% get_active_game_sessions request.user as active_games %}
+        {% if active_games %}
+            <h6 class="text-center text-warning">Имеются активные игры:</h6>
+        {% endif %}
+        {% for game in active_games %}
+            <a href="{% url 'game:game' game.lobby_code %}"
+               class="d-block p-1 m-auto bg-warning rounded-1 text-dark text-center fw-bold mt-1">
+                    {{ game.quiz.title }}
+            </a>
+            <a href="{% url 'game:close_game' game.id %}" class="text-info m-auto text-center close-game-btn">Закрыть сессию</a>
+        {% endfor %}
+
+    </div>
+    <script>
+        document.querySelector('.close-game-btn').onclick = function (e){
+            let confirmClose = confirm('Закрыть игровую сессию?')
+            if (!confirmClose) {
+                e.preventDefault();
+            }
+        }
+    </script>
+{% endblock %}

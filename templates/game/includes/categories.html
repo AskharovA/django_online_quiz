@@ -1,0 +1,11 @@
+<div class="game-category-list">
+    {% for category in categories %}
+        <div class="game-category {% if category.game.quiz.author == request.user or category.game.is_test %}get-category-btn{% endif %}
+        {% if category.is_played %}played-category{% endif %}" id="category-{{ category.id }}">
+            {{ category.category.name }}
+            <p class="game-category-questions-count">
+                Вопросов: {{ category.question_states.count }}
+            </p>
+        </div>
+    {% endfor %}
+</div>

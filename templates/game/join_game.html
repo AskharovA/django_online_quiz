@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="{% url 'game:join_game' %}" method="post" class="join-form bg-light">
+    {% csrf_token %}
+    <h4>Вход в игру</h4>
+    <br>
+    <input type="text" class="form-control" name="game_code" autofocus autocomplete="off" placeholder="код игры">
+    {% if not request.user.is_authenticated %}
+        <input type="text" name="player_name" class="form-control" autocomplete="off" placeholder="ваше имя">
+    {% endif %}
+    <br>
+    <input type="submit" value="Войти" class="btn btn-outline-dark">
+</form>
+{% endblock %}

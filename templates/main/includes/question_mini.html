@@ -1,0 +1,9 @@
+{% extends 'main/question_base.html' %}
+{% block btn %}
+    <button
+            hx-get="{% url 'main:question_detail' question.id %}"
+            hx-target="closest tr"
+            hx-swap="outerHTML">
+        Редактировать
+    </button>
+{% endblock %}

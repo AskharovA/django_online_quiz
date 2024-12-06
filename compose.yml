@@ -1,0 +1,76 @@
+services:
+  quiz_backend_service:
+    image: quiz_app:1.0.8
+    container_name: quiz_backend
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 5
+    volumes:
+      - .:/django_online_quiz
+    env_file:
+      - .env
+    networks:
+      - quizNetwork
+    depends_on:
+      - quiz_db_service
+      - quiz_redis_service
+
+  quiz_celery_service:
+    image: quiz_app:1.0.8
+    container_name: quiz_celery
+    command: celery -A config worker --loglevel=info
+    volumes:
+      - .:/django_online_quiz
+    env_file:
+      - .env
+    networks:
+      - quizNetwork
+    depends_on:
+      - quiz_db_service
+      - quiz_redis_service
+
+  quiz_nginx:
+    image: nginx:latest
+    volumes:
+      - ./config/nginx:/etc/nginx/conf.d
+      - .:/django_online_quiz
+    ports:
+      - "80:80"
+    networks:
+      - quizNetwork
+    depends_on:
+      - quiz_backend_service
+      - quiz_celery_service
+      - quiz_daphne_service
+
+  quiz_daphne_service:
+    image: quiz_app:1.0.8
+    container_name: quiz_daphne
+    command: daphne -b 0.0.0.0 -p 8001 config.asgi:application
+    volumes:
+      - .:/django_online_quiz
+    env_file:
+      - .env
+    networks:
+      - quizNetwork
+
+  quiz_db_service:
+    image: postgres:16-bookworm
+    container_name: quiz_db
+    env_file:
+      - .env
+    networks:
+      - quizNetwork
+    volumes:
+      - quiz-data:/var/lib/postgresql/data
+
+  quiz_redis_service:
+    image: redis:7.4
+    container_name: quiz_redis
+    networks:
+      - quizNetwork
+
+networks:
+  quizNetwork:
+    external: true
+
+volumes:
+  quiz-data:

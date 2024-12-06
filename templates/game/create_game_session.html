@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <br>
+    <div class="current-avatar">
+        <img src="{{ request.user.profile.avatar.url }}" class="avatar-img" id="{{ avatar.id }}">
+    </div>
+
+    <form class="join-form" action="" method="post">
+        {% csrf_token %}
+        <label class="form-label text-secondary w-100" for="id_quiz">Выберите викторину</label>
+        <div class="gradient-btn-bg w-100">{{ form.quiz }}</div>
+        <label class="form-label text-secondary w-100" for="id_timer">Таймер обычных вопросов (сек)</label>
+        <div class="gradient-btn-bg w-100">{{ form.timer }}</div>
+        <label class="form-label text-secondary w-100" for="id_text_answer_timer">Таймер текстовых вопросов (сек)</label>
+        <div class="gradient-btn-bg w-100">{{ form.text_answer_timer }}</div>
+        <div class="gradient-btn-bg w-100"><button type="submit" class="home-btn">Создать игру</button></div>
+    </form>
+{% endblock %}

@@ -1,0 +1,4 @@
+<p class="text-light">Ошибок: {{ errors_count }}</p>
+{% for message in errors_message %}
+    <p class="text-warning m-0">{{ message }}</p>
+{% endfor %}

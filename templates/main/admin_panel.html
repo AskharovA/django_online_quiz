@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}<link rel="stylesheet" href="{% static 'css/quizCreator.css' %}">{% endblock %}
+{% block content %}
+
+    <form action="{% url 'main:delete_sessions' %}" method="post">
+        <h4 class="text-light">Очистка временных данных</h4>
+        {% csrf_token %}
+        <input type="submit" value="Очистить временные данные" class="btn btn-warning">
+    </form>
+    <hr class="border-light">
+    <h4 class="text-light">Загрузить аватар для временных пользователей</h4>
+    <form action="{% url 'main:add_avatar' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.image }}
+        <br>
+        <input type="submit" value="Загрузить аватар" class="btn btn-warning">
+    </form>
+
+{% endblock %}

@@ -1,0 +1,47 @@
+<h2 class="stat-answer">{{ question.question.correct_text_answer }}</h2>
+<table class="table table-dark text-answers-table">
+    <tr>
+        <th class="bg-success">
+            <small>Игрок</small>
+        </th>
+        <th class="w-50 bg-success">
+            <small>Ответ</small>
+        </th>
+        <th class="bg-success" >Результат</th>
+    </tr>
+    {% for answer in question.text_answers.all %}
+        <tr>
+            <td class="text-info">
+                {{ answer.player.player_name }}
+            </td>
+            <td class="text-info">
+                {{ answer.answer }}
+            </td>
+            <td class="w-25">
+                {% if question.game.quiz.author == request.user %}
+                <button class="btn btn-success save-answer-btn" id="answer-{{ answer.id }}">
+                    Правильно
+                </button>
+                {% endif %}
+                <button id="answer-id-{{ answer.id }}"
+                        class="hidden-btn"
+                        hx-get="{% url 'game:correct_text_answer'%}"
+                        hx-target="closest td"
+                        hx-swap="innerHTML">
+                </button>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+<br>
+<button class="btn btn-dark" id="get-next-text-question">
+    Следующий вопрос
+</button>
+
+<script>
+    document.getElementById('get-next-text-question').onclick = () => {
+        WS.send(JSON.stringify({
+            "start-category": "start-category",
+        }));
+    }
+</script>

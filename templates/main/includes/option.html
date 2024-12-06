@@ -1,0 +1,9 @@
+<fieldset class="form-group border p-3">
+    <legend class="col-form-label col-sm-2 pt-0 w-auto text-dark">Вариант ответа {{ forloop.counter }}</legend>
+    <div class="form-check">
+        {{ option_form.text }}
+        <label class="form-check-label">
+            Правильный ответ {{ option_form.is_correct }}
+        </label>
+    </div>
+</fieldset>

@@ -1,0 +1,25 @@
+FROM python:3.11.9-slim
+
+RUN useradd -s /bin/sh -u 1234 nonroot
+
+WORKDIR /usr/src/app
+
+ENV PYTHONUNBUFFERED=1
+
+RUN apt-get update && apt-get install -y gcc libpcre3-dev
+
+COPY requirements.txt .
+
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+RUN pip install gunicorn
+
+RUN sed -i 's/\r$//g' /usr/src/app/entrypoint.prod.sh
+RUN chmod +x /usr/src/app/entrypoint.prod.sh
+
+RUN chown -R nonroot:nonroot /usr/src/app
+USER nonroot
+
+ENTRYPOINT [ "./entrypoint.prod.sh" ]
